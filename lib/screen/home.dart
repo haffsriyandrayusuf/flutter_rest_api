@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../model/user.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -11,29 +13,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<dynamic> users = [];
+  List<UserModel> users = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: const Text("Rest API Call"),
       ),
       body: ListView.builder(
         itemCount: users.length,
         itemBuilder: (BuildContext context, int index) {
           final user = users[index];
-          final name = user['name']['first'];
-          final email = user['email'];
-          final imageUrl = user['picture']['thumbnail'];
+          final color = user.gender == 'male' ? Colors.blue : Colors.pink;
           return ListTile(
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image.network(imageUrl),
-            ),
-            title: Text(name),
-            subtitle: Text(email),
+            title: Text(user.name.first),
+            subtitle: Text(user.phone),
+            tileColor: color,
           );
         },
       ),
@@ -48,8 +44,24 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await http.get(uri);
     final body = response.body;
     final json = jsonDecode(body);
+    final results = json['results'] as List<dynamic>;
+    final transformed = results.map((user) {
+      final name = UserName(
+        title: user['name']['title'],
+        first: user['name']['first'],
+        last: user['name']['last'],
+      );
+      return UserModel(
+        gender: user['gender'],
+        email: user['email'],
+        phone: user['phone'],
+        cell: user['cell'],
+        nat: user['nat'],
+        name: name,
+      );
+    }).toList();
     setState(() {
-      users = json['results'];
+      users = transformed;
     });
     debugPrint("fetchUsers completed");
   }
