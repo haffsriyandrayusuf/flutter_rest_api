@@ -1,7 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_rest_api/services/user_api.dart';
 
 import '../model/user.dart';
 
@@ -16,6 +14,12 @@ class _HomeScreenState extends State<HomeScreen> {
   List<UserModel> users = [];
 
   @override
+  void initState() {
+    super.initState();
+    fetchUsers();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -25,44 +29,19 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: users.length,
         itemBuilder: (BuildContext context, int index) {
           final user = users[index];
-          final color = user.gender == 'male' ? Colors.blue : Colors.pink;
           return ListTile(
-            title: Text(user.name.first),
+            title: Text(user.fullName),
             subtitle: Text(user.phone),
-            tileColor: color,
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(onPressed: fetchUsers),
     );
   }
 
   void fetchUsers() async {
-    debugPrint("fetchUsers called");
-    const url = 'https://randomuser.me/api/?results=100';
-    final uri = Uri.parse(url);
-    final response = await http.get(uri);
-    final body = response.body;
-    final json = jsonDecode(body);
-    final results = json['results'] as List<dynamic>;
-    final transformed = results.map((user) {
-      final name = UserName(
-        title: user['name']['title'],
-        first: user['name']['first'],
-        last: user['name']['last'],
-      );
-      return UserModel(
-        gender: user['gender'],
-        email: user['email'],
-        phone: user['phone'],
-        cell: user['cell'],
-        nat: user['nat'],
-        name: name,
-      );
-    }).toList();
+    final respopne = await UserApi.fetchUsers();
     setState(() {
-      users = transformed;
+      users = respopne;
     });
-    debugPrint("fetchUsers completed");
   }
 }

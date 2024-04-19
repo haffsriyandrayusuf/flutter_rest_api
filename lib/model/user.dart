@@ -1,4 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'user_name.dart';
+
 class UserModel {
   final String gender;
   final String email;
@@ -15,16 +16,8 @@ class UserModel {
     required this.nat,
     required this.name,
   });
-}
 
-class UserName {
-  final String title;
-  final String first;
-  final String last;
-
-  UserName({
-    required this.title,
-    required this.first,
-    required this.last,
-  });
+  String get fullName {
+    return "${name.title} ${name.first} ${name.last}";
+  }
 }
