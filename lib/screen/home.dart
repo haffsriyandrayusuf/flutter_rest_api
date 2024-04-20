@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rest_api/services/user_api.dart';
 
 import '../model/user.dart';
+import '../services/user_api.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,8 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
         itemBuilder: (BuildContext context, int index) {
           final user = users[index];
           return ListTile(
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(user.picture.medium),
+            ),
             title: Text(user.fullName),
-            subtitle: Text(user.phone),
+            subtitle: Text(user.location.street.name),
           );
         },
       ),
