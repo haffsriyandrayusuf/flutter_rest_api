@@ -17,42 +17,10 @@ class UserApi {
     final json = jsonDecode(body);
     final results = json['results'] as List<dynamic>;
     final users = results.map((user) {
-      final name = UserName(
-        title: user['name']['title'],
-        first: user['name']['first'],
-        last: user['name']['last'],
-      );
-      final coordinates = LocationCoordinate(
-        latitude: user['location']['coordinates']['latitude'],
-        longitude: user['location']['coordinates']['longitude'],
-      );
-      final street = LocationStreet(
-        number: user['location']['street']['number'],
-        name: user['location']['street']['name'],
-      );
-      final timezone = LocationTimezone(
-        offset: user['location']['timezone']['offset'],
-        description: user['location']['timezone']['description'],
-      );
-      final location = UserLocation(
-        city: user['location']['city'],
-        state: user['location']['state'],
-        country: user['location']['country'],
-        postcode: user['location']['postcode'].toString(),
-        street: street,
-        coordinates: coordinates,
-        timezone: timezone,
-      );
-      final date = user['dob']['date'];
-      final dob = UserDob(
-        age: user['dob']['age'],
-        date: DateTime.parse(date),
-      );
-      final picture = UserPicture(
-        large: user['picture']['large'],
-        medium: user['picture']['medium'],
-        thumbnail: user['picture']['thumbnail'],
-      );
+      final name = UserName.fromMap(user['name']);
+      final location = UserLocation.fromMap(user['location']);
+      final dob = UserDob.fromMap(user['dob']);
+      final picture = UserPicture.fromMap(user['picture']);
       return UserModel(
         gender: user['gender'],
         name: name,

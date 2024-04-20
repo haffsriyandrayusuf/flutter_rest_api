@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundImage: NetworkImage(user.picture.medium),
             ),
             title: Text(user.fullName),
-            subtitle: Text(user.location.street.name),
+            subtitle: Text(user.location.coordinates.latitude),
           );
         },
       ),
