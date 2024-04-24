@@ -40,10 +40,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   final user = listUser[index];
                   return ListTile(
                     leading: CircleAvatar(
-                      child: Text("${index + 1}"),
+                      backgroundImage: NetworkImage(user.picture.medium),
                     ),
-                    title: Text(user.email),
-                    subtitle: Text(user.cell),
+                    title: Text(user.fullName),
+                    subtitle: Text(
+                        user.id.value == null ? '-' : user.id.value.toString()),
+                    // subtitle: Text(
+                    //     '${user.location.city}, ${user.location.country} ${user.cell} '),
                   );
                 },
               );
