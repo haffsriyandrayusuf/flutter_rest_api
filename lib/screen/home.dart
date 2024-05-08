@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<UserModel> users = [];
+  bool _isloading = true;
 
   @override
   void initState() {
@@ -25,7 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text("Rest API Call"),
       ),
-      body: ListView.builder(
+      body: _isloading ? const Center(
+        child: CircularProgressIndicator(),
+      ) : ListView.builder(
         itemCount: users.length,
         itemBuilder: (BuildContext context, int index) {
           final user = users[index];
@@ -42,9 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void fetchUsers() async {
-    final respopne = await UserApi.fetchUsers();
+    final respone = await UserApi.fetchUsers();
     setState(() {
-      users = respopne;
+      users = respone;
+      _isloading = false;
     });
   }
 }
